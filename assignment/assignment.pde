@@ -27,6 +27,7 @@ void setup()
   createButton("WIND SPEED", 8, width - 110, 355, color(255, 0, 0), cf1);
   createButton("STATS", 9, width - 110, 405, color(255, 0, 0), cf1);
   createButton("RAIN V SUN", 10, width - 110, 455, color(255, 0, 0), cf1);
+  createButton("AVG R V S", 11, width - 110, 505, color(255, 0, 0), cf1);
 }
 
 Button createButton(String theName, int theValue, int theX, int theY, color theColor, ControlFont font) 
@@ -153,9 +154,11 @@ void findstats()
   text("The AVG min windspeed from 1985-2014 was: "+(minwind) + "kt it recorded in "+ (stats.get(miwind).month) + " of the year " + (stats.get(miwind).year), width * 0.01f, 50 * 7);
   text("The AVG max sun hours from 1985-2014 was: "+(maxsun) + "H it recorded in "+ (stats.get(mxsun).month) + " of the year " + (stats.get(mxsun).year), width * 0.01f, 50 * 8);
   text("The AVG min sun hours from 1985-2014 was: "+(minsun) + "H it recorded in "+ (stats.get(misun).month) + " of the year " + (stats.get(misun).year), width * 0.01f, 50 * 9);
-  text("The final button shows that there is no link between the amount of sun we get and the rain fall,", width * 0.01f, 50 * 11);
-  text("blue is for rain and red is for sun.", width * 0.01f, 50 * 12);
+  text("The second last button shows that there is no link between the", width * 0.01f, 50 * 11);
+  text("amount of sun we get and the rain fall, blue is for rain and red is for sun.", width * 0.01f, 50 * 12);
+  text("The last button is rain v sun with the AVG dataset", width * 0.01f, 50 * 13);
 }
+
 
 void keyPressed()
 {
@@ -200,8 +203,28 @@ void draw()
   case 10 : 
     rainvsun();
     break;
+  case 11 : 
+    rainvsun2();
+    break;
   }
 }// end of the draw method
+
+void rainvsun2()
+{
+  background(backImage);
+  stroke(0);
+  strokeWeight(4);
+  float barWidth = (width - 120) / (float) data.size();
+  for (int i = 0; i < data.size(); i ++)
+  {
+    float x = i * barWidth;
+    fill(0, 0, 255);
+    rect(x, height, barWidth, - map(data.get(i).rain, 0, 600, height, 0));
+    fill(255, 0, 0,125);
+    rect(x, height, barWidth, - map(data.get(i).sunhours, 0, 600, height, 0));
+  }
+}
+
 
 void rainvsun()
 {
@@ -215,7 +238,7 @@ void rainvsun()
     fill(0, 0, 255);
     rect(x, height, barWidth, - map(stats.get(i).rain, 0, 500, height, 0));
     fill(255, 0, 0,125);
-    stroke(255);
+    stroke(0);
     rect(x, height, barWidth, - map(stats.get(i).sun, 0, 500, height, 0));
   }
 }
